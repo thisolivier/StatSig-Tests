@@ -13,7 +13,7 @@ struct Statsig_TestApp: App {
 
     var body: some Scene {
         WindowGroup {
-            SpamInitilisationReadinessTests()
+            HomeView()
                 .environment(\.statSigService, statSigClient)
         }
     }
