@@ -15,5 +15,7 @@ extension Bool: ExperimentValue {}
 // Homogeneous arrays only
 extension Array: ExperimentValue where Element: ExperimentValue {}
 
-// Heterogeneous dictionary: directly declare the conformance
+// Homogenious dictionary supported: directly declare the conformance
 extension Dictionary: ExperimentValue where Key == String, Value: ExperimentValue {}
+
+// TODO: Add support for Codable types which decode from StatSig's getValue function.

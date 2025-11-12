@@ -22,7 +22,7 @@ struct Layers {
         )
     }
 
-    static func limitedChaos() -> LayerValueRequest<Dictionary<String, [Int]>> {
+    static func limitedChaos() -> LayerValueRequest<Dictionary<String, String>> {
         return LayerValueRequest(
             layerName: "example_layer",
             valueKey: "limitedChaos",
@@ -30,7 +30,7 @@ struct Layers {
         )
     }
 
-    static func seriousChaos() -> LayerValueRequest<Dictionary<String, ExperimentValue>> {
+    static func seriousChaos() -> LayerValueRequest<Dictionary<String, any ExperimentValue>> {
         return LayerValueRequest(
             layerName: "example_layer",
             valueKey: "seriousChaos",

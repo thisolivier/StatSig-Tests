@@ -8,10 +8,13 @@
 import Foundation
 import Statsig
 
-// Bridge a Statsig array into a homogeneous ExperimentValue array.
+// Bridge a generic array into a homogeneous ExperimentValue array.
 // Infers element type from the first element.
 // Rejects empty arrays and any mismatches.
 // Nested arrays and arrays of objects not supported.
+
+// TODO: Would be nice to support nested arrays
+// TODO: Would be nice to support empty arrays, including when nested (an empty array always conforms to the given array type)
 func BridgeArrayToHomogeneous(
     _ array: [Any]
 ) -> (any ExperimentValue)? {
