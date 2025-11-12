@@ -20,7 +20,7 @@ public extension EnvironmentValues {
 
 public actor NoopStatsig: StatSigTestable {
     public var isReady: Bool = false
-    public func initialise() async throws {}
+    public func initialise(_: StatSigInitArgs) async throws {}
     public func check(gate: String) async -> Bool { false }
     public func get(experiment: String) async -> [String : Any] { [:] }
     public func spamGateCheck() async {}

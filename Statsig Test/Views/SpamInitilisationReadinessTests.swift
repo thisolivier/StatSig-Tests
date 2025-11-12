@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+// Results
+// - Experiment not found if SDK never initialised [Y]
+// - Feature gate defaults to off if SDK never initialised [Y]
+// - Can continue to spam SDK during init [Y]
+// - Once init, will respond correctly to feature gate [Y]
+// - On next launch, before init, will respond with last cached value [Y]
+// - On next launch, after init, will respond with current value [Y]
+
 struct SpamInitilisationReadinessTests: View {
     @Environment(\.statSigService) private var statSig
     @State private var ready = "Not Yet Ready"

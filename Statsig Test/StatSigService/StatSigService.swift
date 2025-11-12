@@ -12,15 +12,33 @@ public typealias StatSigTestable = StatSigProvidable & SpamCheckable
 
 public protocol StatSigProvidable {
     var isReady: Bool { get async }
-    func initialise() async throws
+    func initialise(_: StatSigInitArgs) async throws
     func check(gate: String) async -> Bool
     func get(experiment: String) async -> [String: Any]
+    func getValue<T: ExperimentValue>(
+        experimentName: String,
+        key: String,
+        defaultValue: T
+    ) async -> T
     func logStream() async -> AsyncStream<String>
+}
+
+extension StatSigProvidable {
+    func initialise(_ args: StatSigInitArgs = .normal) async throws {
+        try await initialise(args)
+    }
 }
 
 public protocol SpamCheckable {
     func spamGateCheck() async -> Void
     func stopSpam() async -> Void
+}
+
+public struct StatSigInitArgs {
+    public var logging: Bool
+    public var userId: String?
+
+    public static let normal: Self = .init(logging: true, userId: nil)
 }
 
 public actor StatSigService: StatSigProvidable {
@@ -45,17 +63,23 @@ public actor StatSigService: StatSigProvidable {
         self.userId = userId
     }
 
-    public func initialise() async throws {
+    public func initialise(_ args: StatSigInitArgs = .normal) async throws {
         //guard !ready else { return }
         try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
             let options = StatsigOptions(
-                autoValueUpdateIntervalSec: 15
+                autoValueUpdateIntervalSec: 15,
+                overrideStableID: args.userId ?? self.userId,
+                eventLoggingEnabled: args.logging
             )
-            let user = StatsigUser()
+            let user = StatsigUser(userID: args.userId ?? self.userId)
             continuation?.yield("RELOADING, \(Date().timeIntervalSince(self.now))")
             self.oldValue = nil
             Statsig.shutdown()
-            Statsig.initialize(sdkKey: sdkKey, options: options) { error in
+            Statsig.initialize(
+                sdkKey: sdkKey,
+                user: user,
+                options: options
+            ) { error in
                 if let error = error {
                     cont.resume(throwing: error)
                 } else {
@@ -73,8 +97,17 @@ public actor StatSigService: StatSigProvidable {
     }
 
     public func get(experiment: String = "myfirsttestexperiment") async -> [String: Any] {
-        return Statsig.getExperiment(experiment).value
+        return Statsig.getExperiment(experiment)
     }
+
+    public func getValue <T: ExperimentValue>(
+        experimentName: String,
+        key: String,
+        defaultValue: T
+    ) async -> T {
+        return await GetValue(experimentName: experimentName, key: key, defaultValue: defaultValue)
+    }
+
 
     public var isReady: Bool { ready }
 
