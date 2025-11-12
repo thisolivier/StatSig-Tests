@@ -10,6 +10,8 @@ import Statsig
 
 public typealias StatSigTestable = StatSigProvidable & SpamCheckable
 
+// Note, this is designed as a working scratchpad to test various theories, not a stable production facing interface.
+
 public protocol StatSigProvidable {
     var isReady: Bool { get async }
     func initialise(_: StatSigInitArgs) async throws
@@ -88,6 +90,11 @@ public actor StatSigService: StatSigProvidable {
                 }
             }
         }
+    }
+
+    public func setLogging(_ logging: Bool) async throws {
+        Statsig.updateOptions(eventLoggingEnabled: logging)
+        Statsig.flush()
     }
 
     public func check(gate: String = "myfirsttestfeaturegate") async -> Bool {

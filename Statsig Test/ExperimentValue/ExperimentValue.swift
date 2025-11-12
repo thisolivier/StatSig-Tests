@@ -16,4 +16,4 @@ extension Bool: ExperimentValue {}
 extension Array: ExperimentValue where Element: ExperimentValue {}
 
 // Heterogeneous dictionary: directly declare the conformance
-extension Dictionary: ExperimentValue where Key == String, Value == any ExperimentValue {}
+extension Dictionary: ExperimentValue where Key == String, Value: ExperimentValue {}

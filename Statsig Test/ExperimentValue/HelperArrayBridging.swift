@@ -13,7 +13,7 @@ import Statsig
 // Rejects empty arrays and any mismatches.
 // Nested arrays and arrays of objects not supported.
 func BridgeArrayToHomogeneous(
-    _ array: [any StatsigDynamicConfigValue]
+    _ array: [Any]
 ) -> (any ExperimentValue)? {
     guard let first = array.first else { return nil }
 
@@ -22,12 +22,6 @@ func BridgeArrayToHomogeneous(
         var out = [String]()
         out.reserveCapacity(array.count)
         for e in array { guard let v = e as? String else { return nil }; out.append(v) }
-        return out
-
-    case is Bool:
-        var out = [Bool]()
-        out.reserveCapacity(array.count)
-        for e in array { guard let v = e as? Bool else { return nil }; out.append(v) }
         return out
 
     case is Int:
@@ -40,6 +34,12 @@ func BridgeArrayToHomogeneous(
         var out = [Double]()
         out.reserveCapacity(array.count)
         for e in array { guard let v = e as? Double else { return nil }; out.append(v) }
+        return out
+
+    case is Bool:
+        var out = [Bool]()
+        out.reserveCapacity(array.count)
+        for e in array { guard let v = e as? Bool else { return nil }; out.append(v) }
         return out
 
     default:

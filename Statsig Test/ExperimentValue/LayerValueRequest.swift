@@ -22,11 +22,11 @@ struct Layers {
         )
     }
 
-    static func limitedChaos() -> LayerValueRequest<Dictionary<String, ExperimentValue>> {
+    static func limitedChaos() -> LayerValueRequest<Dictionary<String, [Int]>> {
         return LayerValueRequest(
             layerName: "example_layer",
             valueKey: "limitedChaos",
-            defaultValue: ["FAIL": true]
+            defaultValue: ["FAIL": [0]]
         )
     }
 
