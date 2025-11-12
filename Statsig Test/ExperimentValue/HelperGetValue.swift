@@ -62,7 +62,7 @@ public func GetValue<T: ExperimentValue>(
     // Heterogeneous dictionary – fetch Statsig's object and bridge to [String: any ExperimentValue].
     if T.self == [String: any ExperimentValue].self {
         guard
-            let raw: [String: any StatsigDynamicConfigValue] = layer.getValue(forKey: key),
+            let raw: Dictionary<String, any StatsigDynamicConfigValue> = layer.getValue(forKey: key),
             let bridged = BridgeEVObject(raw),
             let result = bridged as? T
         else {

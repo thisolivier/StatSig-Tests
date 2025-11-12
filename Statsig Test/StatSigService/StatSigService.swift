@@ -15,10 +15,8 @@ public protocol StatSigProvidable {
     func initialise(_: StatSigInitArgs) async throws
     func check(gate: String) async -> Bool
     func get(experiment: String) async -> [String: Any]
-    func getValue<T: ExperimentValue>(
-        experimentName: String,
-        key: String,
-        defaultValue: T
+    func getValue <T: ExperimentValue>(
+        valueRequest: LayerValueRequest<T>
     ) async -> T
     func logStream() async -> AsyncStream<String>
 }
@@ -97,15 +95,17 @@ public actor StatSigService: StatSigProvidable {
     }
 
     public func get(experiment: String = "myfirsttestexperiment") async -> [String: Any] {
-        return Statsig.getExperiment(experiment)
+        return Statsig.getExperiment(experiment).value
     }
 
     public func getValue <T: ExperimentValue>(
-        experimentName: String,
-        key: String,
-        defaultValue: T
+        valueRequest: LayerValueRequest<T>
     ) async -> T {
-        return await GetValue(experimentName: experimentName, key: key, defaultValue: defaultValue)
+        return await GetValue(
+            experimentName: valueRequest.layerName,
+            key: valueRequest.valueKey,
+            defaultValue: valueRequest.defaultValue
+        )
     }
 
 

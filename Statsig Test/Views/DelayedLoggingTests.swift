@@ -102,5 +102,5 @@ struct DelayedLoggingTests: View {
 }
 
 #Preview {
-    SpamInitilisationReadinessTests()
+    DelayedLoggingTests()
 }

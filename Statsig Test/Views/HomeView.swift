@@ -15,6 +15,7 @@ struct HomeView: View {
             VStack(spacing: 16) {
                 Button("Spam Initialisation Tests") { path.append(Route.SpamInit) }
                 Button("Delayed Login Tests") { path.append(Route.DelayedLogging) }
+                Button("Value Conversion Tests") { path.append(Route.ExperimentValue) }
             }
             .navigationTitle("Home")
             // map route values to destination views
@@ -22,6 +23,7 @@ struct HomeView: View {
                 switch route {
                 case .SpamInit: SpamInitilisationReadinessTests()
                 case .DelayedLogging: DelayedLoggingTests()
+                case .ExperimentValue: ExperimentValueTests()
                 }
             }
         }

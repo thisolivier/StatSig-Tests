@@ -10,4 +10,5 @@ import Foundation
 enum Route: Hashable {
     case SpamInit
     case DelayedLogging
+    case ExperimentValue
 }
