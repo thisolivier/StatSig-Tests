@@ -15,6 +15,18 @@ public func GetValue<T: ExperimentValue>(
 ) async -> T {
     let layer = Statsig.getLayer(experimentName)
 
+    // Codable experiment values – attempt to decode heterogeneous dictionaries first.
+    if let codableType = T.self as? StatsigCodableExperimentValue.Type {
+        var candidate = layer.getValue(forKey: key) as? [String: Any]
+        if candidate == nil {
+            candidate = layer.getValue(forKey: key, defaultValue: [:]) as? [String: Any]
+        }
+        if let raw = candidate,
+           let decoded = codableType.decode(fromStatsig: raw) as? T {
+            return decoded
+        }
+    }
+
     // Scalars – let Statsig do typed fetch + defaulting (no force unwraps).
     if T.self == String.self {
         let def = (defaultValue as? String)!
