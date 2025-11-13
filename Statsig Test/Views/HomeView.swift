@@ -21,9 +21,9 @@ struct HomeView: View {
             // map route values to destination views
             .navigationDestination(for: Route.self) { route in
                 switch route {
-                case .SpamInit: SpamInitilisationReadinessTests()
-                case .DelayedLogging: DelayedLoggingTests()
-                case .ExperimentValue: ExperimentValueTests()
+                case .SpamInit: TestReadinessView()
+                case .DelayedLogging: TestDelayedLoggingView()
+                case .ExperimentValue: TestExperimentValueView()
                 }
             }
         }

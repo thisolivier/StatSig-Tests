@@ -9,6 +9,7 @@ import Foundation
 import Statsig
 
 // Bridge a generic array into a homogeneous ExperimentValue array.
+// Used for decoding objects, not for top level arrays directly from statsig.
 // Infers element type from the first element.
 // Rejects empty arrays and any mismatches.
 // Nested arrays and arrays of objects not supported.

@@ -17,7 +17,7 @@ import SwiftUI
 // - Logs when called during re-init (from log disabled to log enabled) with same user when [Y - though noted as value coming from cache]
 // - Logs when called during re-init (keeping logging disabled) with same user and later enabling logging [Y - though noted as value coming from cache]
 
-struct DelayedLoggingTests: View {
+struct TestDelayedLoggingView: View {
     @Environment(\.statSigService) private var statSig
     @State private var ready = "Not Yet Ready"
     @State private var lines = [String]()
@@ -102,5 +102,5 @@ struct DelayedLoggingTests: View {
 }
 
 #Preview {
-    DelayedLoggingTests()
+    TestDelayedLoggingView()
 }

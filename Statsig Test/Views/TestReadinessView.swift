@@ -15,7 +15,7 @@ import SwiftUI
 // - On next launch, before init, will respond with last cached value [Y]
 // - On next launch, after init, will respond with current value [Y]
 
-struct SpamInitilisationReadinessTests: View {
+struct TestReadinessView: View {
     @Environment(\.statSigService) private var statSig
     @State private var ready = "Not Yet Ready"
     @State private var lines = [String]()
@@ -56,5 +56,5 @@ struct SpamInitilisationReadinessTests: View {
 }
 
 #Preview {
-    SpamInitilisationReadinessTests()
+    TestReadinessView()
 }

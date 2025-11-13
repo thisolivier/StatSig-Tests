@@ -67,8 +67,31 @@ public func GetValue<T: ExperimentValue>(
         let v: [Bool] = layer.getValue(forKey: key, defaultValue: def)
         return (v as? T) ?? defaultValue
     }
+    if let defaultAsArray = defaultValue as? [any ExperimentValueCodable] {
+        guard
+            let raw: [[String: Any]] = layer.getValue(forKey: key)
+        else {
+            return defaultValue
+        }
+
+        // If the default is empty, we don't know what concrete type to decode to.
+        guard let first = defaultAsArray.first else {
+            return defaultValue // This is a bad fallback - we need a default value to work with.
+        }
+
+        let elementType = type(of: first)   // elementType: any ExperimentValueCodable.Type
+
+        // Decode each dictionary into that element type.
+        let newArray: [any ExperimentValueCodable] = raw.compactMap { item in
+            elementType.decode(fromStatsig: item)
+        }
+
+        // Coerce back to T if possible; otherwise fall back to default.
+        return (newArray as? T) ?? defaultValue
+    }
 
     // Heterogeneous dictionary – fetch Statsig's object and bridge to [String: any ExperimentValue].
+    // Would recommend deprecating this in favour of Codable types.
     if let _ = defaultValue as? [String: any ExperimentValue] {
         guard
             let raw: [String: Any]  = layer.getValue(forKey: key),
