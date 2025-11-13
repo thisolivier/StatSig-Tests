@@ -16,3 +16,10 @@ The approach here (thanks GPT/Codex for the head start), is to have a small ammo
 
 ## Example Code
 There's examples of reading Scalars, Arrays, Homogenous Dicts and Codable types in the ExperimentValueTests view. They all work.
+
+## Further Thoughts
+Statsig's Array support isn't fully mirrored, since it exposes any valid JSON array- meaning arbitrarily complex JSON objects can be added to an array, as well as heterogenious arrays (a mix of types).
+
+What we aren't supporint currently is empty arrays, and arrays containing objects. It should be trivial to support empty arrays, and simple to support the current codable techniques in arrays.
+
+I might get Codex to give it a shot.
