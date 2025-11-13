@@ -57,7 +57,7 @@ public actor StatSigService: StatSigProvidable {
 
     public init(
         sdkKey: String = "client-UTgfra8reyCWYvWrgs2zIVpLIRIRDfu1SXysakeq4je",
-        userId: String = "beansbeans12345678"
+        userId: String = "beansbeans12345678" // Static ID used as default
     ) {
         self.sdkKey = sdkKey
         self.userId = userId

@@ -12,13 +12,7 @@ However, it does not support nested objects, the boilerplate feels very hacky an
 ### Safe and With Boilerplate - Codable Types
 After some thought the real issue here is that Statsig rejected giving us raw JSON for objects, which is by far the most normal way to deal with JSON objects. And they are JSON objects, that's the format the web UI enforces.
 The approach here (thanks GPT/Codex for the head start), is to have a small ammount of default implementation boilerplate included in a ExperimentValueCodable type. This allows us to automatically JSONify an input dict, and then decode our Codable type from it.
+I've also gone and enabled arrays of codable types, though it will fail if you have an empty array as the default value, since we need an array element to get the type from.
 
 ## Example Code
 There's examples of reading Scalars, Arrays, Homogenous Dicts and Codable types in the ExperimentValueTests view. They all work.
-
-## Further Thoughts
-Statsig's Array support isn't fully mirrored, since it exposes any valid JSON array- meaning arbitrarily complex JSON objects can be added to an array, as well as heterogenious arrays (a mix of types).
-
-What we aren't supporint currently is and arrays containing objects. Simple to support the current codable techniques in arrays.
-
-I might get Codex to give it a shot.

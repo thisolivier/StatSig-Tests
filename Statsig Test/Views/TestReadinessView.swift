@@ -22,24 +22,28 @@ struct TestReadinessView: View {
 
     var body: some View {
         VStack {
+            Button("Start spamming gate check") {
+                Task { await statSig.spamGateCheck() }
+            }
             Button("Stop Spam") {
                 Task { await statSig.stopSpam() }
             }
-            Button("Reinitialise") {
-                Task { try? await statSig.initialise() }
+            Text("When you start spamming the gate check, we check the value of the gate repeatedly at a very short interval. Values which are the same as previous are discarded, new values are logged below.")
+            Text("Relaunch the app after first loading StatSig")
+            Button("Initialise/Reinitialise") {
+                Task {
+                    ready = "Initialising..."
+                    do {
+                        try await statSig.initialise() // Uses a hardcoded ID
+                        ready = "Statsig Ready"
+                    } catch {
+                        ready = "Statsig Not Ready: Unknown Error"
+                    }
+                }
             }
             Text(ready)
             List(lines, id: \.self) { Text($0).font(.system(.footnote, design: .monospaced)) }
                 .listStyle(.plain)
-        }
-        .task {
-            do {
-                await statSig.spamGateCheck()
-                try await statSig.initialise()
-                ready = "Hell Yeah"
-            } catch {
-                ready = "Unknown Error"
-            }
         }
         .task {
             for await line in await statSig.logStream() {
