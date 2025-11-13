@@ -29,7 +29,7 @@ struct TestReadinessView: View {
                 Task { await statSig.stopSpam() }
             }
             Text("When you start spamming the gate check, we check the value of the gate repeatedly at a very short interval. Values which are the same as previous are discarded, new values are logged below.")
-            Text("Relaunch the app after first loading StatSig")
+            Text("Relaunch the app after first loading StatSig & spam again to see if you get cached values.")
             Button("Initialise/Reinitialise") {
                 Task {
                     ready = "Initialising..."
