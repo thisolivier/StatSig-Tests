@@ -10,6 +10,7 @@ import Statsig
 
 // Bridge a homogeneous dictionary of Any values into ExperimentValue values recursively.
 // Reject mixed-value kinds (e.g., String with Int) and any unsupported kinds.
+// Rejects nested objects
 func BridgeEVObject(
     _ dict: [String: Any]
 ) -> [String: any ExperimentValue]? {
@@ -28,7 +29,7 @@ func BridgeEVObject(
         if v is Int    { return .int }
         if v is Double { return .double }
         if v is [Any] { return .array }
-        if v is [String: Any] { return .object }
+        if v is [String: Any] { return .object } // Note: Not supported
         return nil
     }
 
@@ -82,13 +83,8 @@ func BridgeEVObject(
             out[k] = bridged
 
         case .object:
-            // TODO: Does this work? I actually would like to just support Codable objects instead of dictionaries at all
-            guard let sub = v as? [String: StatsigDynamicConfigValue],
-                  let bridged = BridgeEVObject(sub) else {
-                // Sub-object not homogeneous or contains unsupported values; consider logging here.
-                return nil
-            }
-            out[k] = bridged as! any ExperimentValue
+            // Not supported
+            return nil
         }
     }
     return out

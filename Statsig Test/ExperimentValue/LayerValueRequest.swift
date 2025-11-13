@@ -12,37 +12,3 @@ public struct LayerValueRequest<T: ExperimentValue> {
     let valueKey: String
     let defaultValue: T
 }
-
-struct Layers {
-    static func string() -> LayerValueRequest<String> {
-        return LayerValueRequest(
-            layerName: "example_layer",
-            valueKey: "dragons",
-            defaultValue: "FAIL"
-        )
-    }
-
-    static func limitedChaos() -> LayerValueRequest<Dictionary<String, String>> {
-        return LayerValueRequest(
-            layerName: "example_layer",
-            valueKey: "limitedChaos",
-            defaultValue: ["FAIL": [0]]
-        )
-    }
-
-    static func seriousChaos() -> LayerValueRequest<Dictionary<String, any ExperimentValue>> {
-        return LayerValueRequest(
-            layerName: "example_layer",
-            valueKey: "seriousChaos",
-            defaultValue: ["FAIL": true]
-        )
-    }
-
-    static func tools() -> LayerValueRequest<[String]> {
-        return LayerValueRequest(
-            layerName: "example_layer",
-            valueKey: "tools",
-            defaultValue: ["FAIL"]
-        )
-    }
-}
