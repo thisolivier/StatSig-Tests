@@ -64,8 +64,8 @@ struct ExperimentValueTests: View {
 
                 Button("Get Layers.seriousChaos()") {
                     Task {
-                        let v: [String: ExperimentValue] = await statSig.getValue(valueRequest: Layers.seriousChaos())
-                        let s = formatDict(v)
+                        let v: ChaoticValue = await statSig.getValue(valueRequest: Layers.seriousChaos())
+                        let s = String(describing: v)
                         let stamp = ts()
                         seriousChaosResult = "\(s)  @\(stamp)"
                         append("[seriousChaos] \(stamp) -> \(s)")

@@ -5,6 +5,8 @@
 //  Created by Olivier Butler on 11/11/2025.
 //
 
+import Foundation
+
 public protocol ExperimentValue {}
 
 extension String: ExperimentValue {}
@@ -18,4 +20,3 @@ extension Array: ExperimentValue where Element: ExperimentValue {}
 // Homogenious dictionary supported: directly declare the conformance
 extension Dictionary: ExperimentValue where Key == String, Value: ExperimentValue {}
 
-// TODO: Add support for Codable types which decode from StatSig's getValue function.
