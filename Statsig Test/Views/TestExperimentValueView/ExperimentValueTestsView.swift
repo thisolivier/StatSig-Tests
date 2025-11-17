@@ -19,6 +19,7 @@ struct TestExperimentValueView: View {
     @State private var toolsResult: String = "—"
     @State private var emptyArrayResult: String = "-"
     @State private var objectInArrResult: String = "-"
+    @State private var customHandlerResult: String = "-"
 
     @State private var lines: [String] = []
 
@@ -53,6 +54,7 @@ struct TestExperimentValueView: View {
                     FlexibleLabeledContent(label:"Layers.tools()") { Text(toolsResult).font(.system(.body, design: .monospaced)) }
                     FlexibleLabeledContent(label:"Layers.emptyArray()") { Text(emptyArrayResult).font(.system(.body, design: .monospaced)) }
                     FlexibleLabeledContent(label:"Layers.objectInArray()") { Text(objectInArrResult).font(.system(.body, design: .monospaced)) }
+                    FlexibleLabeledContent(label:"Layers.customHandler()") { Text(customHandlerResult).font(.system(.body, design: .monospaced)) }
                 }
 
                 Divider()
@@ -108,6 +110,15 @@ struct TestExperimentValueView: View {
                             let s = String(describing: v)
                             let stamp = ts()
                             objectInArrResult = "\(s)  @\(stamp)"
+                        }
+                    }
+
+                    Button("Get Layers.customHandler()") {
+                        Task {
+                            let v: [ArrayElementValue] = await statSig.getValue(valueRequest: Layers.customHandler())
+                            let s = String(describing: v)
+                            let stamp = ts()
+                            customHandlerResult = "\(s)  @\(stamp)"
                         }
                     }
                 }

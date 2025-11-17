@@ -19,9 +19,6 @@ public extension EnvironmentValues {
 }
 
 public actor NoopStatsig: StatSigTestable {
-    public func getValue<T>(
-        valueRequest: LayerValueRequest<T>
-    ) async -> T where T : ExperimentValue { return valueRequest.defaultValue }
     public var isReady: Bool = false
     public func initialise(_: StatSigInitArgs) async throws {}
     public func check(gate: String) async -> Bool { false }
@@ -31,4 +28,10 @@ public actor NoopStatsig: StatSigTestable {
     public func logStream() async -> AsyncStream<String> {
         AsyncStream<String>(){_ in}
     }
+    public func getValue<T>(valueRequest: CustomLayerValueRequest<T>) async -> T {
+        return valueRequest.defaultValue
+    }
+    public func getValue<T>(
+        valueRequest: LayerValueRequest<T>
+    ) async -> T where T : ExperimentValue { return valueRequest.defaultValue }
 }

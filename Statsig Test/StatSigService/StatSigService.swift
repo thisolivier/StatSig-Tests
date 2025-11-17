@@ -13,14 +13,23 @@ public typealias StatSigTestable = StatSigProvidable & SpamCheckable
 // Note, this is designed as a working scratchpad to test various theories, not a stable production facing interface.
 
 public protocol StatSigProvidable {
+    // Lifecycle
     var isReady: Bool { get async }
     func initialise(_: StatSigInitArgs) async throws
+    func logStream() async -> AsyncStream<String>
+
+    // Basic get checks
     func check(gate: String) async -> Bool
     func get(experiment: String) async -> [String: Any]
+
+    // Use of ExperimentValue and getValue functions
     func getValue <T: ExperimentValue>(
         valueRequest: LayerValueRequest<T>
     ) async -> T
-    func logStream() async -> AsyncStream<String>
+    func getValue <T>(
+        valueRequest: CustomLayerValueRequest<T>
+    ) async -> T
+
 }
 
 extension StatSigProvidable {
@@ -49,6 +58,7 @@ public actor StatSigService: StatSigProvidable {
 
     private let sdkKey: String
     private let now: Date = Date()
+    private let getValueHelper: GetValueHelper = .init()
 
     private var logs: [String] = []
     private var continuation: AsyncStream<String>.Continuation?
@@ -108,13 +118,19 @@ public actor StatSigService: StatSigProvidable {
     public func getValue <T: ExperimentValue>(
         valueRequest: LayerValueRequest<T>
     ) async -> T {
-        return await GetValue(
+        return getValueHelper.getValue(
             experimentName: valueRequest.layerName,
             key: valueRequest.valueKey,
             defaultValue: valueRequest.defaultValue
         )
     }
 
+    public func getValue <T>(
+        valueRequest: CustomLayerValueRequest<T>
+    ) async -> T {
+        let layer = Statsig.getLayer(valueRequest.layerName)
+        return valueRequest.handler(layer, valueRequest.valueKey, valueRequest.defaultValue)
+    }
 
     public var isReady: Bool { ready }
 
