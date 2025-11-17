@@ -14,5 +14,9 @@ After some thought the real issue here is that Statsig rejected giving us raw JS
 The approach here (thanks GPT/Codex for the head start), is to have a small ammount of default implementation boilerplate included in a ExperimentValueCodable type. This allows us to automatically JSONify an input dict, and then decode our Codable type from it.
 I've also gone and enabled arrays of codable types, though it will fail if you have an empty array as the default value, since we need an array element to get the type from. We could used a typed overload to get around this.
 
+## A different approach
+If you look at LayerValueRequest, you'll see two request wrappers. The CustomLayerValueRequest actually never needs any of the above boilerplate because you pass it a custom handler. It can also handle any type. 
+This makes extracting info from StatSig much simpler and flexible by using concrete case-by-case information.
+
 ## Example Code
 There's examples of reading Scalars, Arrays, Homogenous Dicts and Codable types in the ExperimentValueTests view. They all work.
