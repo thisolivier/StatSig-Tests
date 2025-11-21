@@ -8,6 +8,7 @@
 import Foundation
 import Statsig
 
+// Used to make a structured request for a layer
 public struct LayerValueRequest<T: ExperimentValue> {
     let layerName: String
     let valueKey: String
