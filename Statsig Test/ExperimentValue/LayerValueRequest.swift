@@ -19,5 +19,16 @@ public struct CustomLayerValueRequest<T> {
     let layerName: String
     let valueKey: String
     let defaultValue: T
-    let handler: (Layer, String, T) -> T
+    private let handler: (Layer, String, T) -> T
+
+    init(layerName: String, valueKey: String, defaultValue: T, handler: @escaping (Layer, String, T) -> T) {
+        self.layerName = layerName
+        self.valueKey = valueKey
+        self.defaultValue = defaultValue
+        self.handler = handler
+    }
+
+    func executeHandler(_ layer: Layer) -> T {
+        return handler(layer, valueKey, defaultValue)
+    }
 }
