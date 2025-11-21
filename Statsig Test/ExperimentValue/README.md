@@ -1,5 +1,12 @@
 #  Implementation Notes
 This was built fast as a POC, it's strongly coupled to the concrete Statsig implementation.
+1. Look at the file ´LayerValueRequest.swift´, it shows how we define a request for a layer. One is designed to be fed into the ´HelperGetValue.swift´ utilities, and requires the requested value is a bool, string, number, array, codable object, or limited dictionary, this is represented by the ExperimentValue protocol, defined in ´ExperimentValue.swift´.
+
+Using HelperGetValue means as long as your type conforms, you don't need any additional per-request code, and you remain decoupled from statsig. However, there is a lot of code handling the mapping, and it's limited.
+
+On the other hand in LayerValueRequest there's another struct which accept any type of return value, and it leaves each request to define how you map from StatSig's types, to the desired return value. I quite like this.
+
+In HelperGetValue you can see how we map from ExperimentValue to Statsig's DynamicConfig, and in ExperimentValueCodable you see the boilerplate to let the interface work with any codable JSON type.
 
 ## Support for Different Types
 ### Easy Wins - Scalars and Arrays
@@ -16,7 +23,7 @@ I've also gone and enabled arrays of codable types, though it will fail if you h
 
 ## A different approach
 If you look at LayerValueRequest, you'll see two request wrappers. The CustomLayerValueRequest actually never needs any of the above boilerplate because you pass it a custom handler. It can also handle any type. 
-This makes extracting info from StatSig much simpler and flexible by using concrete case-by-case information.
+This makes extracting info from StatSig much simpler and flexible by using concrete case-by-case information. But we do expose the Layer object to the consumer, leaking Statsig semantics. Maybe we could write a simple wrapper?
 
 ## Example Code
 There's examples of reading Scalars, Arrays, Homogenous Dicts and Codable types in the ExperimentValueTests view. They all work.
