@@ -1,8 +1,12 @@
 #  Implementation Notes
 This was built fast as a POC, it's strongly coupled to the concrete Statsig implementation.
-1. Look at the file ´LayerValueRequest.swift´, it shows how we define a request for a layer. One is designed to be fed into the ´HelperGetValue.swift´ utilities, and requires the requested value is a bool, string, number, array, codable object, or limited dictionary, this is represented by the ExperimentValue protocol, defined in ´ExperimentValue.swift´.
+1. Look at the file ´LayerValueRequest.swift´, it shows how we define a request for a layer. One is designed to be fed into the ´HelperGetValue.swift´ utilities, and requires the requested value is a bool, string, number, array, codable object, or limited dictionary.
+2. Checkout ExperimentValue and ExperimentValueCodable for how the protocol is applied. These are the kinds of thing we are mapping into statsig types.
+3. Check out HelperGetValue, which has implementations for the various types of data listed below.
 
-Using HelperGetValue means as long as your type conforms, you don't need any additional per-request code, and you remain decoupled from statsig. However, there is a lot of code handling the mapping, and it's limited.
+## The Zero Boilerplate Approach 
+
+Using HelperGetValue means as long as your type conforms to ExperimentValue, you don't need any additional per-request code, and you remain decoupled from statsig. However, there is a lot of code handling the mapping, and it's limited.
 
 On the other hand in LayerValueRequest there's another struct which accept any type of return value, and it leaves each request to define how you map from StatSig's types, to the desired return value. I quite like this.
 
